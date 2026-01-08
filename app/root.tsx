@@ -10,6 +10,9 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 
+//custom context provider
+import { AuthProvider } from "./context/AuthContext";
+
 //custom components
 import NavBar from "./components/navbar";
 
@@ -42,13 +45,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
-        <NavBar />
-        <main>{children}</main>
-
-        <ScrollRestoration />
-        <Scripts />
-      </body>
+      <AuthProvider>
+        <body>
+          <NavBar />
+          <main>{children}</main>
+          <ScrollRestoration />
+          <Scripts />
+        </body>
+      </AuthProvider>
     </html>
   );
 }

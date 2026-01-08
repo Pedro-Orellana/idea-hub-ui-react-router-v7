@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useAuth } from "~/context/AuthContext";
 import { Link } from "react-router";
 
 const NavBar = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const { user } = useAuth();
 
   return (
     <nav>
@@ -10,7 +10,7 @@ const NavBar = () => {
         <h1 className="text-3xl text-orange-500">Idea Hub</h1>
 
         <div className="items-center space-x-4">
-          {loggedIn ? (
+          {user ? (
             <>
               <Link to={"/ideas"}>All Ideas</Link>
               <Link to={"/ideas/create"}>New Idea</Link>
