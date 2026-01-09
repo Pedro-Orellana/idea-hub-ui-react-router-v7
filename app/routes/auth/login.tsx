@@ -1,34 +1,29 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useFetcher } from "react-router";
 import { useAuth } from "~/context/AuthContext";
+import { loginFunction } from "~/api/auth";
+import type { Route } from "../about/+types";
 
-import axiosInstance from "~/lib/axios";
+export const action = async ({ request }: Route.ActionArgs) => {
+  const data = await request.formData();
+  const email = data.get("email")?.toString();
+  const password = data.get("password")?.toString();
+
+  if (!email || !password) {
+    return { error: "Email and password are required" };
+  }
+  return await loginFunction({ email, password });
+};
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const { setUser } = useAuth();
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    //right now it should automatically log the user in, without checking anything
-    //once I have server running, this has to really log in a user
-    if (!email || !password) {
-      setError("both email and password are neccessary");
-    } else {
-      const loginInfo = {
-        email,
-        password,
-      };
-      axiosInstance.post("/auth/login", loginInfo);
-      setUser(email);
-      navigate("/ideas");
-    }
-  };
+  const fetcher = useFetcher();
 
   return (
     <>
@@ -37,13 +32,13 @@ const LoginPage = () => {
         Welcome back! share your ideas with the world today.
       </p>
 
-      {error && (
+      {fetcher?.data?.error && (
         <div className="bg-red-100 text-red-700 py-2 px-2 mt-2 text-center">
-          {error}
+          {fetcher.data.error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="flex flex-col mt-10">
+      <fetcher.Form method="post" className="flex flex-col mt-10">
         <h3 className="text-sm mb-2">
           Please provide the following information:{" "}
         </h3>
@@ -59,7 +54,7 @@ const LoginPage = () => {
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
-              setError("");
+              if (fetcher?.data?.error) fetcher.data.error = "";
             }}
             className="border border-gray-400 rounded px-3 py-2"
           />
@@ -79,7 +74,7 @@ const LoginPage = () => {
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
-              setError("");
+              if (fetcher?.data?.error) fetcher.data.error = "";
             }}
             className="border border-gray-400 rounded px-3 py-2"
           />
@@ -92,7 +87,7 @@ const LoginPage = () => {
         >
           Login
         </button>
-      </form>
+      </fetcher.Form>
 
       <p className="text-center mt-2">
         Don't have an account? create one{" "}

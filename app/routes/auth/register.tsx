@@ -1,22 +1,21 @@
 import { Link, useFetcher } from "react-router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { Route } from "../about/+types";
 
-import axiosInstance from "~/lib/axios";
+import { registerFunction } from "~/api/auth";
 
 export const action = async ({ request }: Route.ActionArgs) => {
   const data = await request.formData();
-  if (!data.get("name") || !data.get("email") || !data.get("password")) {
+
+  const name = data.get("name")?.toString();
+  const email = data.get("email")?.toString();
+  const password = data.get("password")?.toString();
+
+  if (!name || !email || !password) {
     return { error: "all fields are required" };
   }
   //data is available and is correct, send an http request to register new user
-  const res = await axiosInstance.post("/auth/register", {
-    name: data.get("name")?.toString(),
-    email: data.get("email")?.toString(),
-    password: data.get("password")?.toString(),
-  });
-
-  return res.data;
+  return await registerFunction({ name, email, password });
 };
 
 const RegisterPage = () => {
@@ -25,10 +24,6 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
 
   const fetcher = useFetcher();
-
-  useEffect(() => {
-    console.log(fetcher);
-  }, [fetcher]);
 
   return (
     <>
