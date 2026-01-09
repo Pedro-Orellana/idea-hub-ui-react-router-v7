@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "~/context/AuthContext";
 
+import axiosInstance from "~/lib/axios";
+
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,6 +20,11 @@ const LoginPage = () => {
     if (!email || !password) {
       setError("both email and password are neccessary");
     } else {
+      const loginInfo = {
+        email,
+        password,
+      };
+      axiosInstance.post("/auth/login", loginInfo);
       setUser(email);
       navigate("/ideas");
     }
