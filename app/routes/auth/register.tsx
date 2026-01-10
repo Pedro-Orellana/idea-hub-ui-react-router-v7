@@ -1,8 +1,10 @@
-import { Link, useFetcher } from "react-router";
-import { useState } from "react";
+import { Link, useFetcher, useNavigate } from "react-router";
+import { useState, useEffect } from "react";
 import type { Route } from "../about/+types";
 
 import { registerFunction } from "~/api/auth";
+
+import { useAuth } from "~/context/AuthContext";
 
 export const action = async ({ request }: Route.ActionArgs) => {
   const data = await request.formData();
@@ -23,7 +25,19 @@ const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const { setToken, setUser } = useAuth();
+
   const fetcher = useFetcher();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (fetcher.data?.accessToken) {
+      setToken(fetcher.data.accessToken);
+      setUser(fetcher.data.user);
+      navigate("/");
+    }
+  }, [fetcher.data]);
 
   return (
     <>
@@ -35,12 +49,6 @@ const RegisterPage = () => {
       {fetcher?.data?.error && (
         <div className="bg-red-100 text-red-700 text-center">
           {fetcher.data.error}
-        </div>
-      )}
-
-      {fetcher?.data?.message && (
-        <div className="bg-green-100 text-green-700 text-center">
-          {fetcher.data.message}
         </div>
       )}
 
@@ -61,7 +69,6 @@ const RegisterPage = () => {
             onChange={(e) => {
               setName(e.target.value);
               if (fetcher?.data?.error) fetcher.data.error = "";
-              if (fetcher?.data?.message) fetcher.data.message = "";
             }}
             className="border border-gray-400 rounded px-3 py-2"
           />
@@ -79,7 +86,6 @@ const RegisterPage = () => {
             onChange={(e) => {
               setEmail(e.target.value);
               if (fetcher?.data?.error) fetcher.data.error = "";
-              if (fetcher?.data?.message) fetcher.data.message = "";
             }}
             className="border border-gray-400 rounded px-3 py-2"
           />
@@ -100,7 +106,6 @@ const RegisterPage = () => {
             onChange={(e) => {
               setPassword(e.target.value);
               if (fetcher?.data?.error) fetcher.data.error = "";
-              if (fetcher?.data?.message) fetcher.data.message = "";
             }}
             className="border border-gray-400 rounded px-3 py-2"
           />

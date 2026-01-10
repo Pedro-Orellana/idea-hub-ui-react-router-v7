@@ -1,7 +1,18 @@
-import type { Route } from "../+types/home";
-import { Link } from "react-router";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router";
+import { useAuth } from "~/context/AuthContext";
 
 export default function Home() {
+  const { token } = useAuth();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, []);
+
   return (
     <div>
       <h1 className="text-2xl">Home Page</h1>
