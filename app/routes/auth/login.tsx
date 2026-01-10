@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useFetcher } from "react-router";
 import { useAuth } from "~/context/AuthContext";
 import { loginFunction } from "~/api/auth";
@@ -19,11 +19,20 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setUser } = useAuth();
+  const { setToken, setUser } = useAuth();
 
   const navigate = useNavigate();
 
   const fetcher = useFetcher();
+
+  useEffect(() => {
+    if (fetcher.data?.accessToken) {
+      //successfully logged in. Navigate to home page and save info to context
+      setToken(fetcher.data.accessToken);
+      setUser(fetcher.data.user);
+      navigate("/");
+    }
+  }, [fetcher.data]);
 
   return (
     <>

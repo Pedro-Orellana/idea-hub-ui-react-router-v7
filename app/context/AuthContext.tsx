@@ -1,8 +1,10 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 
 type TempAuthContextType = {
-  user: string | null;
-  setUser: (user: string) => void;
+  user: { id: string; name: string; email: string } | null;
+  setUser: (user: TempAuthContextType["user"] | null) => void;
+  token: string | null;
+  setToken: (token: string) => void;
 };
 
 const tempAuthContext = createContext<TempAuthContextType | undefined>(
@@ -11,10 +13,11 @@ const tempAuthContext = createContext<TempAuthContextType | undefined>(
 
 //creating custom provider to add to root.tsx
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState<TempAuthContextType["user"]>(null);
+  const [token, setToken] = useState("");
 
   return (
-    <tempAuthContext.Provider value={{ user, setUser }}>
+    <tempAuthContext.Provider value={{ user, setUser, token, setToken }}>
       {children}
     </tempAuthContext.Provider>
   );
