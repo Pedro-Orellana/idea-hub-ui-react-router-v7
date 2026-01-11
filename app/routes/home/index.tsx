@@ -1,6 +1,10 @@
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useAuth } from "~/context/AuthContext";
+
+//custom components
+import LatestIdeas from "~/components/latest-ideas";
+import AboutSection from "~/components/about";
 
 export default function Home() {
   const { token } = useAuth();
@@ -15,13 +19,8 @@ export default function Home() {
 
   return (
     <div>
-      <h1 className="text-2xl">Home Page</h1>
-      <Link
-        to={"/ideas"}
-        className="bg-blue-500 rounded-md px-4 py-2 text-white"
-      >
-        Go to Ideas
-      </Link>
+      <LatestIdeas />
+      <AboutSection />
     </div>
   );
 }
