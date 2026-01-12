@@ -2,9 +2,15 @@ import { useState } from "react";
 import { useFetcher } from "react-router";
 import type { Route } from "./+types";
 
+import { useAuth } from "~/context/AuthContext";
+
+import { createIdeaFunction } from "~/api/ideas";
+
 export const action = async ({ request }: Route.ActionArgs) => {
   const data = await request.formData();
 
+  const accessToken = data.get("accessToken")?.toString();
+  const userId = data.get("userId")?.toString();
   const title = data.get("title")?.toString();
   const summary = data.get("summary")?.toString();
   const description = data.get("description")?.toString();
@@ -14,7 +20,24 @@ export const action = async ({ request }: Route.ActionArgs) => {
     return { error: "Please fill out all the fields to submit a new idea" };
   }
 
-  return { message: "New idea submitted!" };
+  //parse tags and make it into an array
+  const tagArray = tags
+    .split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
+
+  if (userId && accessToken) {
+    const newIdea = {
+      userId,
+      title,
+      summary,
+      description,
+      tags: tagArray,
+    };
+
+    const res = await createIdeaFunction(newIdea, accessToken);
+    return res;
+  }
 };
 
 const IdeaCreatePage = () => {
@@ -24,6 +47,8 @@ const IdeaCreatePage = () => {
   const [tags, setTags] = useState("");
 
   const fetcher = useFetcher();
+
+  const { token, user } = useAuth();
 
   return (
     <div className="max-w-6xl mx-auto my-20">
@@ -108,6 +133,25 @@ const IdeaCreatePage = () => {
             className="p-2 border border-gray-400 rounded"
           />
         </div>
+
+        {/* hidden inputs to store accessToken and userId */}
+        <input
+          type="password"
+          name="accessToken"
+          id="accessToken"
+          readOnly
+          value={token?.toString()}
+          className="hidden"
+        />
+
+        <input
+          type="password"
+          name="userId"
+          id="userId"
+          readOnly
+          value={user?.id.toString()}
+          className="hidden"
+        />
 
         <button
           type="submit"
