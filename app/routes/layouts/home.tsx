@@ -6,14 +6,13 @@ import { Outlet } from "react-router";
 const HomeLayout = () => {
   return (
     //screen background color
-    <div className="h-screen bg-teal-100">
+    <div className="min-h-screen bg-white">
       <div className="flex flex-col h-full justify-between">
         <div>
           <NavBar />
           <Hero />
           <Outlet />
         </div>
-
         <Footer />
       </div>
     </div>

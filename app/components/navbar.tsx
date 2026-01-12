@@ -23,9 +23,9 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="mb-20 bg-amber-100">
-      <div className="flex px-6 py-3 max-w-6xl mx-auto items-center justify-between">
-        <h1 className="text-3xl text-orange-500">Idea Hub</h1>
+    <nav className="bg-stone-200">
+      <div className="flex  py-4 max-w-6xl mx-auto items-center justify-between">
+        <h1 className="text-3xl text-orange-500 font-bold">IdeaHub</h1>
 
         <div className="items-center space-x-4">
           {token ? (
