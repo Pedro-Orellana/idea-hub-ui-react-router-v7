@@ -30,8 +30,8 @@ const NavBar = () => {
         <div className="items-center space-x-4">
           {token ? (
             <>
-              <Link to={"/ideas"}>All Ideas</Link>
-              <Link to={"/ideas/create"}>New Idea</Link>
+              <Link to={"/"}>Home</Link>
+              <Link to={"/ideas"}>Ideas</Link>
               <Link to={"/about"}>About</Link>
               <button
                 type="button"

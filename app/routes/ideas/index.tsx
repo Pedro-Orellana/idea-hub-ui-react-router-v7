@@ -1,12 +1,10 @@
-import { Link } from "react-router";
+//custom components
+import IdeasHero from "~/components/ideas-hero";
 
 const IdeasPage = () => {
   return (
     <div>
-      <h1 className="text-2xl">Ideas Page</h1>
-      <Link to={"/"} className="bg-blue-500 text-white px-4 py-2 rounded-md">
-        Go back home
-      </Link>
+      <IdeasHero />
     </div>
   );
 };
