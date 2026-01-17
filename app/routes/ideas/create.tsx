@@ -8,9 +8,6 @@ import { createIdeaFunction } from "~/api/ideas";
 
 export const action = async ({ request }: Route.ActionArgs) => {
   const data = await request.formData();
-
-  const accessToken = data.get("accessToken")?.toString();
-  const userId = data.get("userId")?.toString();
   const title = data.get("title")?.toString();
   const summary = data.get("summary")?.toString();
   const description = data.get("description")?.toString();
@@ -26,18 +23,15 @@ export const action = async ({ request }: Route.ActionArgs) => {
     .map((t) => t.trim())
     .filter(Boolean);
 
-  if (userId && accessToken) {
-    const newIdea = {
-      userId,
-      title,
-      summary,
-      description,
-      tags: tagArray,
-    };
+  const newIdea = {
+    title,
+    summary,
+    description,
+    tags: tagArray,
+  };
 
-    const res = await createIdeaFunction(newIdea, accessToken);
-    return res;
-  }
+  const res = await createIdeaFunction(newIdea);
+  return res;
 };
 
 const IdeaCreatePage = () => {
@@ -133,25 +127,6 @@ const IdeaCreatePage = () => {
             className="p-2 border border-gray-400 rounded"
           />
         </div>
-
-        {/* hidden inputs to store accessToken and userId */}
-        <input
-          type="password"
-          name="accessToken"
-          id="accessToken"
-          readOnly
-          value={token?.toString()}
-          className="hidden"
-        />
-
-        <input
-          type="password"
-          name="userId"
-          id="userId"
-          readOnly
-          value={user?.id.toString()}
-          className="hidden"
-        />
 
         <button
           type="submit"
