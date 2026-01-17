@@ -19,7 +19,6 @@ export const createIdeaFunction = async (idea: {
     console.log(res.data);
     return res.data;
   } catch (err: any) {
-    //create interceptor here
     const statusCode = err.status;
     const errData = err.response.data;
     console.log(statusCode);

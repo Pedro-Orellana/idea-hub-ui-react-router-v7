@@ -1,7 +1,6 @@
 //file that will store the value of the access token
 //this is already saved in state, but there are places where state
 //cannot be accessed, but the token is needed, that's the reason for this file
-console.log("Auth module initialized");
 
 let storedAccessToken: string | null = null;
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFetcher } from "react-router";
 import type { Route } from "./+types";
 
@@ -6,7 +6,35 @@ import { useAuth } from "~/context/AuthContext";
 
 import { createIdeaFunction } from "~/api/ideas";
 
-export const action = async ({ request }: Route.ActionArgs) => {
+// export const action = async ({ request }: Route.ActionArgs) => {
+//   const data = await request.formData();
+//   const title = data.get("title")?.toString();
+//   const summary = data.get("summary")?.toString();
+//   const description = data.get("description")?.toString();
+//   const tags = data.get("tags")?.toString();
+
+//   if (!title || !summary || !description || !tags) {
+//     return { error: "Please fill out all the fields to submit a new idea" };
+//   }
+
+//   //parse tags and make it into an array
+//   const tagArray = tags
+//     .split(",")
+//     .map((t) => t.trim())
+//     .filter(Boolean);
+
+//   const newIdea = {
+//     title,
+//     summary,
+//     description,
+//     tags: tagArray,
+//   };
+
+//   const res = await createIdeaFunction(newIdea);
+//   return res;
+// };
+
+export const clientAction = async ({ request }: Route.ClientActionArgs) => {
   const data = await request.formData();
   const title = data.get("title")?.toString();
   const summary = data.get("summary")?.toString();
@@ -42,7 +70,8 @@ const IdeaCreatePage = () => {
 
   const fetcher = useFetcher();
 
-  const { token, user } = useAuth();
+  //FIX THIS!!!!!!
+  //use <Form> and redirect() function here instead of useFetcher()
 
   return (
     <div className="max-w-6xl mx-auto my-20">
